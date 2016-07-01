@@ -32,9 +32,11 @@ def get_status(api_url):
   except requests.exceptions.RequestException:
     return False, "Unavailable"
 
-def get_users(api_url):
+def list_users(api_url, args):
   response = requests.get(api_url + "users")
-  print response
+  if response.status_code != STATUS_OK:
+    print "cerebro-cli error: unable to list users"
+    sys.exit(1)
   print response.json()
 
 def handle_status(api_url):
@@ -57,7 +59,7 @@ def handle_users(api_url, args):
 
   cmd = args[1]
   if cmd == "list":
-    get_users(api_url)
+    list_users(api_url, args)
 
 def main():
   parser = OptionParser()
